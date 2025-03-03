@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { BsSearch } from 'react-icons/bs';
 import { MdLocationOn } from 'react-icons/md';
+import { FiSun, FiMoon } from 'react-icons/fi';
 
 const API_KEY = '84c0ee8a268dc9d02944341ba3109f0e';
 
-const SearchBar = ({ query, setQuery, onSearch, onLiveLocation }) => {
+const SearchBar = ({ query, setQuery, onSearch, onLiveLocation, theme, setTheme, unit, setUnit }) => {
   const [suggestions, setSuggestions] = useState([]);
 
   // Fetch location suggestions from OpenWeatherMap API
@@ -33,18 +33,13 @@ const SearchBar = ({ query, setQuery, onSearch, onLiveLocation }) => {
   }, [query]);
 
   return (
-    <div className="flex flex-col items-center w-full">
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSearch();
-        }}
-        className="flex items-center mb-4 w-full max-w-2xl relative"
-      >
+    <nav className="w-fullbg-sky-300 px-4 py-2 flex justify-between items-center">
+      {/* Location & Search */}
+      <div className="flex items-center gap-2 w-full max-w-2xl">
         <button
           type="button"
           onClick={onLiveLocation}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-l-md"
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md"
         >
           <MdLocationOn size={24} className="text-white" />
           <span className="text-sm">Location</span>
@@ -56,15 +51,18 @@ const SearchBar = ({ query, setQuery, onSearch, onLiveLocation }) => {
             placeholder="Search for location"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="pl-4 pr-10 py-2 w-full text-black bg-white border border-gray-300 rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="pl-4 pr-4 py-2 w-full text-white bg-transparent border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-white"
           />
-          <button 
-            type="submit" 
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-800"
-          >
-            <BsSearch size={20} />
-          </button>
         </div>
+
+        {/* New "Search" Button */}
+        <button 
+          type="submit"
+          onClick={(e) => { e.preventDefault(); onSearch(); }}
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md"
+        >
+          Search
+        </button>
 
         {/* Auto-suggestions dropdown */}
         {suggestions.length > 0 && (
@@ -83,8 +81,27 @@ const SearchBar = ({ query, setQuery, onSearch, onLiveLocation }) => {
             ))}
           </ul>
         )}
-      </form>
-    </div>
+      </div>
+
+      {/* Theme & Unit Switch */}
+      <div className="flex items-center gap-4">
+        {/* Day/Night Mode Toggle */}
+        <button
+          onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+          className="text-xl p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+        >
+          {theme === 'light' ? <FiSun /> : <FiMoon />}
+        </button>
+
+        {/* Temperature Unit Toggle */}
+        <button
+          onClick={() => setUnit(unit === 'metric' ? 'imperial' : 'metric')}
+          className="px-4 py-2 text-sm bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600"
+        >
+          {unit === 'metric' ? '°C' : '°F'}
+        </button>
+      </div>
+    </nav>
   );
 };
 

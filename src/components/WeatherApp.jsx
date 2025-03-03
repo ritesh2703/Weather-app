@@ -3,7 +3,7 @@ import axios from "axios";
 import SearchBar from "./SearchBar";
 import WeatherCard from "./WeatherCard";
 import Sidebar from "./Sidebar";
-import HourlyGraph from "./HourlyGraph"; // Import HourlyGraph
+import AppName from './AppName';
 
 const API_KEY = "84c0ee8a268dc9d02944341ba3109f0e";
 const DEFAULT_CITY = "Wardha";
@@ -101,6 +101,10 @@ const WeatherApp = () => {
 
   return (
     <div className={`h-auto w-full ${getBackgroundColor()} transition-colors duration-500 overflow-auto`}>
+      <nav className="w-full">
+      <AppName />
+      {/* Other navbar elements */}
+    </nav>
       <div className="flex min-h-screen">
         {/* Sidebar */}
         <Sidebar recentSearches={recentSearches} onSearch={fetchWeather} />
@@ -121,12 +125,6 @@ const WeatherApp = () => {
               <>
                 {/* Weather Card */}
                 <WeatherCard weather={weatherData} />
-
-                {/* Hourly Graph */}
-                {weatherData.coord && (
-                  <div className="mt-6 w-full max-w-4xl mx-auto p-4 bg-white bg-opacity-90 rounded-xl shadow-xl overflow-x-auto">
-                  </div>
-                )}
               </>
             )
           )}
